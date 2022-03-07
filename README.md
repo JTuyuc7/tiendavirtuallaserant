@@ -1,3 +1,13 @@
+
+# Application created
+- Clean the project and upload to git the base version of the app
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
