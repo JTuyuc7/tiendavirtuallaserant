@@ -4,8 +4,8 @@ const Login = () => {
 
     return(
         <>
-            <div>
-                <h1>Prueba Iniciar sesion</h1>
+            <div className='bg-blue-700'>
+                <h1 className='text-white font-medium'>Prueba Iniciar sesion</h1>
             </div>
         </>
     )
