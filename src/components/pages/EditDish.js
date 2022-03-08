@@ -1,16 +1,14 @@
 import React from 'react';
 
-
-const MyOrders = () => {
+const EditDish = () => {
 
     return(
-
         <>
             <div>
-                <h2>From My Orders</h2>
+                <h3>Edit Dish</h3>
             </div>
         </>
     )
 }
 
-export default MyOrders;
+export default EditDish;
