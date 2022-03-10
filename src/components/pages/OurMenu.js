@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Dish from '../subcomponents/Dish';
 import { BsArrowUp, BsPlusCircle } from 'react-icons/bs';
+import { getAllDishesAction } from '../../services/dishesServices';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingPage from '../subcomponents/LoadingPage';
 
-const tempData = [
+/* const tempData = [
     { id: 1, nombre: 'Producto uno', precio: 30, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 3 },
     { id: 2, nombre: 'Producto dos', precio: 20, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno',cantidad: 12 },
     { id: 3, nombre: 'Producto tres', precio: 35, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'bebibda', cantidad: 19 },
@@ -12,11 +15,22 @@ const tempData = [
     { id: 6, nombre: 'Producto seis', precio: 90, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno', cantidad: 20 },
     { id: 7, nombre: 'Producto site', precio: 100, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 15 },
     { id: 8, nombre: 'Producto ocho', precio: 300, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'postre', cantidad: 9 }
-]
+] */
 
 const OurMenu = () => {
     const navigation = useNavigate()
     const [ isVisible, setIsVisible ] = useState(false);
+
+    const dispatch = useDispatch();
+    const { loading, dishes } = useSelector( (state) => state.dishes);
+    //console.log(dishes, 'dishes')
+
+    // Get Data
+    useEffect(() => {
+        //console.log('getting data')
+        dispatch(getAllDishesAction())
+    },[])
+
     const toogleVisivility = () => {
         if(window.pageYOffset > 300){
             setIsVisible(true);
@@ -38,7 +52,9 @@ const OurMenu = () => {
 
     return(
         <>
-            <div className='min-h-screen flex flex-col p-7 '>
+            <div className='min-h-screen flex flex-col p-7'>
+
+                { loading && ( <LoadingPage /> )}
                 <div className='bg-blue-500 pt-3 pb-3'>
                     <h2>Filtro</h2>
                 </div>
@@ -46,7 +62,7 @@ const OurMenu = () => {
                     <h1 className='text-center font-bold uppercase text-2xl mb-5'>Our Menu</h1>
 
                     <div className='sm:grid-cols-2 sm:grid gap-5 xl:grid-cols-3'>
-                        { tempData?.map( (dish) => (
+                        { dishes?.map( (dish) => (
                             <Dish 
                                 key={dish.id}
                                 dish={dish}
