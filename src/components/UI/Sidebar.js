@@ -14,7 +14,7 @@ const Sidebar = () => {
 
     return(
         <>
-            <div className='bg-purple-500 md:w-1/4 xl:w-1/6 shadow-2xl rounded-b-3xl md:rounded-b-none'>
+            <div className='bg-purple-500 md:w-1/4 xl:w-1/6 shadow-2xl shadow-gray-600 rounded-b-3xl md:rounded-b-none'>
             {/*<div className='bg-yellow-500 sm:w-2/6 xl:w-1/6 shadow-3xl'>*/}
 
                 <div className=' p-5 md:p-3  min-h-fit md:min-h-screen'>
@@ -30,7 +30,7 @@ const Sidebar = () => {
                     </div>
 
                     <div className=' flex mt-3 justify-around md:flex-col'>
-                        <div className='pt-2 pb-3 hover:scale-105'>
+                        <div className='mb-3 hover:scale-105 shadow-lg rounded-md'>
                             <NavLink
                                 style={ ({isActive}) => isActive ? activeStyle : undefined}
                                 className='flex p-3 justify-between rounded-md uppercase font-bold'
@@ -41,7 +41,7 @@ const Sidebar = () => {
                             </NavLink>
                         </div>
                         
-                        <div className='pt-2 pb-3 hover:scale-105'>
+                        <div className='mb-3 hover:scale-105 shadow-2xl rounded-md'>
                             <NavLink
                                 style={ ({isActive}) => isActive ? activeStyle : undefined}
                                 className='flex p-3 justify-between rounded-md uppercase font-bold text-gray-800'

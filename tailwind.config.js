@@ -2,7 +2,11 @@ module.exports = {
   darkMode: 'class',
   content: ["index.js", "./src/**/*.js"],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        '94': '22rem',
+      }
+    },
     boxShadow: {
       xs: '0 0 0 1px rgba(0, 0, 0, 0.05)',
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -16,7 +20,7 @@ module.exports = {
       outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
       focus: '0 0 0 3px rgba(66, 153, 225, 0.5)',
       none: 'none',
-    }
+    },
   },
   plugins: [],
 }

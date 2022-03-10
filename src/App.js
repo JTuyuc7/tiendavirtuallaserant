@@ -10,24 +10,31 @@ import EditDish from './components/pages/EditDish';
 // Import SideBar
 import Sidebar from './components/UI/Sidebar';
 
+import { store } from '../src/app/store';
+import { Provider } from 'react-redux';
+
 const App = () => {
   return(
     <>
-      <BrowserRouter>
+      <Provider
+        store={store}
+      >
+        <BrowserRouter>
 
-        <div className='md:flex min-h-screen bg-white'>
-        <Sidebar />
+          <div className='md:flex min-h-screen bg-white'>
+          <Sidebar />
 
-          <div className='md:w-3/4 xl:w-5/6'>
-            <Routes>
-              {/*<Route path='/' element={<Login />} />*/}
-              <Route path='/' element={ <OurMenu />} />
-              <Route path='/new-dish' element={<NewDish />} />
-              <Route path='/edit-dish/:id' element={ <EditDish />} />
-            </Routes>
+            <div className='md:w-3/4 xl:w-5/6'>
+              <Routes>
+                {/*<Route path='/' element={<Login />} />*/}
+                <Route path='/' element={ <OurMenu />} />
+                <Route path='/new-dish' element={<NewDish />} />
+                <Route path='/edit-dish/:id' element={ <EditDish />} />
+              </Routes>
+            </div>
           </div>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </Provider>
     </>
   )
 }

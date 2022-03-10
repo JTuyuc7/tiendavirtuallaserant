@@ -2,22 +2,36 @@ import React from 'react';
 import imagen from '../tempImgs/pizza.jpg';
 import { BsFillPencilFill, BsFillTrashFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import { deleteDishAction } from '../../services/dishesServices';
+import { selectedDish, getIdDelete } from '../../features/dishesSlice';
+import { useDispatch } from 'react-redux';
 
 const Dish = ({ dish }) => {
     const navigation = useNavigate();
-    const { id, nombre, precio, existencia, img, descripcion, categoria, cantidad } = dish;
+    const dispatch = useDispatch();
+    const { id, name, price, existencia, img, description, category, quantity } = dish;
 
     const editProducto = () => {
-        console.log('editin data', dish)
+        //console.log('editin data', dish)
+        dispatch(selectedDish(dish))
         navigation(`edit-dish/${id}`);
+    }
+
+    const handleDelete = () => {
+        dispatch(getIdDelete(id))
+
+        // Confirm
+        setTimeout(() => {
+            dispatch(deleteDishAction(id))
+        },3000 );
     }
     return (
         <>
             <div 
-                className='mb-8 md:mb-0 p-3 rounded-md shadow-2xl hover:scale-105 justify-center transition duration-150 ease-out' 
+                className='mb-8 md:mb-0 p-3 rounded-md shadow-2xl shadow-gray-500 hover:scale-105 justify-center transition duration-150 ease-out' 
                 //onClick={ () => console.log('clicked', id)}
             >
-                <h2 className='text-center text-md font-semibold mb-4 mt-2'>{nombre}</h2>
+                <h2 className='text-center text-md font-semibold mb-4 mt-2'>{name}</h2>
                 <div>
                     <img 
                         className='object-cover h-40 w-full'
@@ -26,32 +40,34 @@ const Dish = ({ dish }) => {
                 </div>
 
                 <div className='mt-2'>
-                    <p>{descripcion}</p>
+                    <p>{description}</p>
 
                     <p className='mt-3'>
-                        <span className='font-bold'>Precio: <span className='text-gray-500'> Q {precio}</span></span>
+                        <span className='font-bold'>Price: <span className='text-gray-500'> Q {price}</span></span>
                     </p>
 
                     <p className='mt-2'>
-                        <span className='font-bold'>Categoria: <span className='text-gray-500'>{categoria}</span></span>
+                        <span className='font-bold'>Category: <span className='text-gray-500'>{category}</span></span>
                     </p>
 
                     <p className='mt-2'>
-                        <span className='font-bold'>Existencia: <span className='text-gray-500'>{cantidad}</span></span>
+                        <span className='font-bold'>Quantity: <span className='text-gray-500'>{quantity}</span></span>
                     </p>
                 </div>
 
                 <div className='grid grid-cols-2 gap-3 mt-4'>
                     <button
                         onClick={ () => editProducto() }
-                        className='bg-blue-500 p-2 rounded-md hover:bg-blue-600 text-white font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out'
+                        //className='bg-blue-500 p-2 rounded-md hover:bg-blue-600 text-white font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out'
+                        className='bg-gradient-to-l from-blue-400 to-blue-500 hover:from-green-500 hover:to-green-700 font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out text-white rounded-md'
                     >
                         Edit
                         <p className='ml-2'> <BsFillPencilFill /></p> 
                     </button>
 
                     <button
-                        className='bg-red-600 p-2 rounded-md hover:bg-red-700 text-white font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out'
+                        onClick={() => handleDelete()}
+                        className='bg-gradient-to-l from-rose-600 to-rose-700 p-2 hover:from-red-600 hover:to-red-800 rounded-md text-white font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out'
                     >
                         Delete
                         <p className='ml-2'><BsFillTrashFill/></p>
