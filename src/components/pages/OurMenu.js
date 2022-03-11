@@ -5,6 +5,7 @@ import { BsArrowUp, BsPlusCircle } from 'react-icons/bs';
 import { getAllDishesAction } from '../../services/dishesServices';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingPage from '../subcomponents/LoadingPage';
+import { selectedImg } from '../../features/dishesSlice';
 
 /* const tempData = [
     { id: 1, nombre: 'Producto uno', precio: 30, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 3 },
@@ -50,6 +51,11 @@ const OurMenu = () => {
         window.addEventListener('scroll', toogleVisivility )
     }, [])
 
+    const newDishAdded = () => {
+        dispatch(selectedImg('https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'))
+        navigation('/new-dish')
+    }
+
     return(
         <>
             <div className='min-h-screen flex flex-col p-7'>
@@ -71,7 +77,7 @@ const OurMenu = () => {
                     </div>
                 </div>
                     <div 
-                        onClick={ () => navigation('/new-dish')}
+                        onClick={ () => newDishAdded() }
                         className='bg-purple-700 w-10 fixed right-5 bottom-20 flex justify-center rounded-full h-11 items-center duration-100 ease-in-out hover:scale-125 cursor-pointer'>
                         <p className='text-3xl font-bold text-white'> <BsPlusCircle /> </p>
                     </div>

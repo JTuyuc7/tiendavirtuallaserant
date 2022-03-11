@@ -3,50 +3,58 @@ import { useNavigate } from 'react-router-dom';
 import { addNewDishAction } from '../../services/dishesServices';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinning from '../subcomponents/Spinning';
-import bgFormimage from '../tempImgs/bgForm.jpg';
+import { useUpload } from '../hooks/useUploadImage';
+import ImageUpload from '../subcomponents/UploadImage';
+
+// Validation
+import * as yup from 'yup';
+import { useFormik } from 'formik';
 
 const NewDish = () => {
     const dispatch = useDispatch();
     const navigation = useNavigate();
-    const { loading } = useSelector( (state) => state.dishes )
-    const [ formDish, setFormDish ] = useState({
-        name: '',
-        price: '',
-        quantity: '',
-        category: '',
-        img: '',
-        description: ''
-    });
+    const { loading } = useSelector( (state) => state.dishes );
 
-    const { name, price, quantity, category, img, description } = formDish;
+    const { upload, progress, imgUrl, imgError, progresImg, handleProgress, handleUploadStart, handleUploadError, handleUploadSuccess  } = useUpload();
+    const [ tempImg, setTempImg ] = useState(null);
 
-    const handleChange = (e) => {
-        setFormDish({
-            ...formDish,
-            [e.target.name] : e.target.value
-        })
-    }
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            price: '',
+            quantity: '',
+            category: '',
+            description: ''
+        },
+        validationSchema: yup.object({
+            name: yup.string().min(3, 'Dish name needs to be large').required('Dish name is required'),
+            price: yup.number().min(1, 'Add a valid Price').required('Price is required'),
+            quantity: yup.number().min(1, 'Add a valid quantity for the dish').required('Quantity is required'),
+            category: yup.string().required('Select a category'),
+            description: yup.string().required('Add a description for the dish')
+        }),
+        onSubmit: (dish) => {
+            
+            if( !imgUrl ){
+                setTempImg(true);
+                setTimeout(() => {
+                    setTempImg(false);
+                }, 1500)
+                return;
+            }
+            
+            if( imgUrl ){
+                let dishObj = {...dish};
+                //dishObj.img = imgUrl;
+                dishObj.img = 'https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg';
+                dishObj.id = Math.random();
+                dispatch(addNewDishAction(dishObj));
+                navigation('/');
+            }
+            
+        }
+    })
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const dishObj = {};
-        dishObj.name = name;
-        dishObj.price = Number(price);
-        dishObj.quantity = Number(quantity);
-        dishObj.category = category;
-        dishObj.img = '';
-        dishObj.description = description;
-        dishObj.id = Math.random();
-
-        //console.log(dishObj, 'obj to be added');
-        dispatch(addNewDishAction(dishObj))
-        
-        setTimeout(() => {
-            navigation('/');
-        }, 1500)
-    }
-
-    console.log(loading, 'loadingadd')
 
     return(
         <>
@@ -59,7 +67,7 @@ const NewDish = () => {
                     <div className='flex justify-center mt-7'>
                         <div className='w-full max-w-xl bg-white opacity-80 rounded-md p-5 shadow-3xl mb-6'>
                             <form
-                                onSubmit={handleSubmit}
+                                onSubmit={formik.handleSubmit}
                             >
                                 <div className='mb-4'>
                                     <label
@@ -72,10 +80,16 @@ const NewDish = () => {
                                         placeholder='Dish name' 
                                         className='block shadow appearance-none rounded-md w-full py-2 px-2 text-black leading-tight focus:outline-none focus:shadow-outline border-2 border-gray-700 font-semibold placeholder-slate-700'
                                         name='name'
-                                        value={name}
-                                        onChange={ (e) => handleChange(e) }
+                                        value={formik.values.name}
+                                        onChange={ formik.handleChange }
+                                        onBlur={formik.handleBlur}
                                     />
                                 </div>
+                                { formik.touched.name && formik.errors.name ? (
+                                    <div className='bg-red-700 rounded-lg mb-4 p-2' role="alert">
+                                        <p className='text-white text-center font-bold'>Opps!! {formik.errors.name}</p>
+                                    </div>
+                                ): null}
 
                                 <div className='mb-4'>
                                     <label
@@ -89,10 +103,16 @@ const NewDish = () => {
                                         min="1"
                                         className='block shadow appearance-none rounded-md w-full py-2 px-2 text-black leading-tight focus:outline-none focus:shadow-outline border-2 border-gray-700 font-semibold' 
                                         name='price'
-                                        value={price}
-                                        onChange={ (e) => handleChange(e)}
+                                        value={ formik.values.price }
+                                        onChange={ formik.handleChange }
+                                        onBlur={formik.handleBlur}
                                     />
                                 </div>
+                                { formik.touched.price && formik.errors.price ? (
+                                    <div className='bg-red-700 rounded-lg mb-4 p-2' role="alert">
+                                        <p className='text-white text-center font-bold'>Opps!! {formik.errors.price}</p>
+                                    </div>
+                                ): null }
 
                                 <div className='mb-4'>
                                     <label
@@ -105,10 +125,16 @@ const NewDish = () => {
                                         min="1" 
                                         className='block shadow appearance-none rounded-md w-full py-2 px-2 text-black leading-tight focus:outline-none focus:shadow-outline border-2 border-gray-700 font-semibold' 
                                         name='quantity'
-                                        value={quantity}
-                                        onChange={ (e) => handleChange(e)}
+                                        value={formik.values.quantity}
+                                        onChange={ formik.handleChange }
+                                        onBlur={formik.handleBlur}
                                     />
                                 </div>
+                                { formik.touched.quantity && formik.errors.quantity ? (
+                                    <div className='bg-red-700 rounded-lg mb-4 p-2' role="alert">
+                                        <p className='text-white text-center font-bold'>Opps!! {formik.errors.quantity}</p>
+                                    </div>
+                                ): null }
 
                                 <div className='mb-4'>
                                     <label
@@ -120,10 +146,11 @@ const NewDish = () => {
                                         id='category'
                                         className="shadow appearance-none border-2 border-gray-700 text-center font-bold rounded-md w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
                                         name='category'
-                                        value={category}
-                                        onChange={ (e) => handleChange(e)}
+                                        value={formik.values.category}
+                                        onChange={ formik.handleChange }
+                                        onBlur={formik.handleBlur}
                                     >
-                                        <option value=""> -- choose one --</option>
+                                        <option value=""> -- Select a category --</option>
                                         <option value="food">Food</option>
                                         <option value="breakfast">Breakfast</option>
                                         <option value="dessert">Dessert</option>
@@ -131,9 +158,30 @@ const NewDish = () => {
                                         <option value="dinner">Dinner</option>
                                     </select>
                                 </div>
+                                { formik.touched.category && formik.errors.category ? (
+                                    <div className='bg-red-700 rounded-lg mb-4 p-2' role="alert">
+                                        <p className='text-white text-center font-bold'>Opps!! {formik.errors.category}</p>
+                                    </div>
+                                ): null }
                                 <div className='mb-4'>
-                                    <label>Img</label>
+                                    <ImageUpload 
+                                        onUploadStart={handleUploadStart}
+                                        onUploadError={handleUploadError}
+                                        onUploadSuccess={handleUploadSuccess}
+                                        onProgress={handleProgress}
+                                        upload={upload}
+                                        progress={progress}
+                                        url={imgUrl}
+                                        error={imgError}
+                                        progressImg={progresImg}
+                                        
+                                    />
                                 </div>
+                                { tempImg ? (
+                                    <div className='bg-red-700 rounded-lg mb-4 p-2' role="alert">
+                                        <p className='text-white text-center font-bold'>Opps!! Image is required</p>
+                                    </div>
+                                ): null }
 
                                 <div className='mb-4'>
                                     <label
@@ -145,12 +193,17 @@ const NewDish = () => {
                                         placeholder='Add a description'
                                         className="shadow appearance-none border-2 border-gray-700 font-bold rounded-md w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
                                         name='description'
-                                        value={description}
-                                        onChange={ (e) => handleChange(e)}
+                                        value={formik.values.description}
+                                        onChange={ formik.handleChange }
+                                        onBlur={formik.handleBlur}
                                     >
-
                                     </textarea>
                                 </div>
+                                { formik.touched.description && formik.errors.description ? (
+                                    <div className='bg-red-700 rounded-lg mb-4 p-2' role="alert">
+                                        <p className='text-white text-center font-bold'>Opps!! {formik.errors.description}</p>
+                                    </div>
+                                ): null }
 
                                 <div>
                                 <button 

@@ -1,15 +1,22 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { BsFillHouseDoorFill, BsFillPlusSquareFill } from 'react-icons/bs';
+import { selectedImg } from '../../features/dishesSlice';
+import { useDispatch } from 'react-redux';
 
 //BsFillHouseDoorFill
 
 const Sidebar = () => {
+    const dispatch = useDispatch();
 
     let activeStyle = {
         textDecoration: 'none',
         backgroundColor: '#6b46c1',
         color: '#000'
+    }
+
+    const newDishToBeAdded = () => {
+        dispatch(selectedImg('https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'))
     }
 
     return(
@@ -43,6 +50,7 @@ const Sidebar = () => {
                         
                         <div className='mb-3 hover:scale-105 shadow-2xl rounded-md'>
                             <NavLink
+                                onClick={ () => newDishToBeAdded() }
                                 style={ ({isActive}) => isActive ? activeStyle : undefined}
                                 className='flex p-3 justify-between rounded-md uppercase font-bold text-gray-800'
                                 to={'/new-dish'}

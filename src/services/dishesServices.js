@@ -10,7 +10,7 @@ import {
     addDishError,
 
     // Edit
-    selectedDish,
+    //selectedDish,
     editDishSuccess,
     editDishError,
 
@@ -19,6 +19,7 @@ import {
     delteDishSuccess,
     deleteDishError
 } from '../features/dishesSlice';
+import Swal from 'sweetalert2';
 
 export const getAllDishesAction = createAsyncThunk(
     'getAllDishes',
@@ -42,9 +43,13 @@ export const addNewDishAction = createAsyncThunk(
     async (data, thunkApi ) => {
         thunkApi.dispatch(startAddingDish(true));
         try {
-            console.log(data, 'dish to be added')
             setTimeout(() => {
                 thunkApi.dispatch(addDishSuccess(data))
+                Swal.fire(
+                    'Great',
+                    'Dish added correctly',
+                    'success'
+                )
             }, 1500)
         } catch (error) {
             console.log(error)
@@ -54,11 +59,11 @@ export const addNewDishAction = createAsyncThunk(
 );
 
 //Edit dish
-export const editUserAction = createAsyncThunk(
+export const editDishAction = createAsyncThunk(
     'editDish',
     async(data, thunkApi) => {
         try {
-            //console.log(data.price, 'price', typeof data.price)
+            //console.log(data, 'data edited?')
             thunkApi.dispatch(editDishSuccess(data))
         } catch (error) {
             console.log(error);
