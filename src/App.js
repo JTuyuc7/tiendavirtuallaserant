@@ -13,28 +13,35 @@ import Sidebar from './components/UI/Sidebar';
 import { store } from '../src/app/store';
 import { Provider } from 'react-redux';
 
+// Firebase
+import firebase, {FirebaseContext} from './components/firebase/index';
+
 const App = () => {
   return(
     <>
-      <Provider
-        store={store}
+      <FirebaseContext.Provider
+        value={{ firebase }}
       >
-        <BrowserRouter>
+        <Provider
+          store={store}
+        >
+          <BrowserRouter>
 
-          <div className='md:flex min-h-screen bg-white'>
-          <Sidebar />
+            <div className='md:flex min-h-screen bg-white'>
+            <Sidebar />
 
-            <div className='md:w-3/4 xl:w-5/6'>
-              <Routes>
-                {/*<Route path='/' element={<Login />} />*/}
-                <Route path='/' element={ <OurMenu />} />
-                <Route path='/new-dish' element={<NewDish />} />
-                <Route path='/edit-dish/:id' element={ <EditDish />} />
-              </Routes>
+              <div className='md:w-3/4 xl:w-5/6'>
+                <Routes>
+                  {/*<Route path='/' element={<Login />} />*/}
+                  <Route path='/' element={ <OurMenu />} />
+                  <Route path='/new-dish' element={<NewDish />} />
+                  <Route path='/edit-dish/:id' element={ <EditDish />} />
+                </Routes>
+              </div>
             </div>
-          </div>
-        </BrowserRouter>
-      </Provider>
+          </BrowserRouter>
+        </Provider>
+      </FirebaseContext.Provider>
     </>
   )
 }

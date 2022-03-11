@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const tempData = [
+/* const tempData = [
     { id: 1, nombre: 'Producto uno', precio: 30, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 3 },
     { id: 2, nombre: 'Producto dos', precio: 20, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno',cantidad: 12 },
     { id: 3, nombre: 'Producto tres', precio: 35, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'bebibda', cantidad: 19 },
@@ -11,7 +11,7 @@ const tempData = [
     { id: 8, nombre: 'Producto ocho', precio: 300, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'postre', cantidad: 9 }
 ]
 
-const tempTest = [];
+const tempTest = []; */
 
 const initialState = {
     dishes: [],
@@ -19,7 +19,8 @@ const initialState = {
     loading: null,
     error: null,
     message: '',
-    idDelete: null
+    idDelete: null,
+    imgEdited: ''
 }
 
 export const dishesSlice = createSlice({
@@ -55,7 +56,7 @@ export const dishesSlice = createSlice({
         editDishSuccess: (state, action) => {
             //state.dish = {}
             state.dishes = state.dishes.map( (ele) => ele.id === action.payload.id ? action.payload : ele )
-            state.dish = null
+            //state.dish = null
         },
         editDishError: (state, action) => {
             state.error = action.payload
@@ -76,6 +77,9 @@ export const dishesSlice = createSlice({
         },
         deleteDishError: (state, action) => {
             state.message = action.payload
+        },
+        selectedImg: (state, action) => {
+            state.imgEdited = action.payload
         }
     }
 });
@@ -100,7 +104,10 @@ export const {
     getIdDelete,
     startDelete,
     delteDishSuccess,
-    deleteDishError
+    deleteDishError,
+
+    //Selec img
+    selectedImg,
     
 } = dishesSlice.actions;
 export default dishesSlice.reducer;

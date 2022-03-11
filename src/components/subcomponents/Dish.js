@@ -3,8 +3,9 @@ import imagen from '../tempImgs/pizza.jpg';
 import { BsFillPencilFill, BsFillTrashFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { deleteDishAction } from '../../services/dishesServices';
-import { selectedDish, getIdDelete } from '../../features/dishesSlice';
+import { selectedDish, getIdDelete, selectedImg } from '../../features/dishesSlice';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 
 const Dish = ({ dish }) => {
     const navigation = useNavigate();
@@ -14,16 +15,27 @@ const Dish = ({ dish }) => {
     const editProducto = () => {
         //console.log('editin data', dish)
         dispatch(selectedDish(dish))
+        //dispatch(selectedImg(img))
+        dispatch(selectedImg('https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'))
         navigation(`edit-dish/${id}`);
     }
 
     const handleDelete = () => {
         dispatch(getIdDelete(id))
-
-        // Confirm
-        setTimeout(() => {
-            dispatch(deleteDishAction(id))
-        },3000 );
+        Swal.fire({
+            title: 'Do you really want to delete?',
+            text: 'Oce deleted it can not be restored',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085f6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete',
+            cancelButtonText: 'Cancel'
+        }).then( (res) => {
+            if(res.isConfirmed){
+                dispatch(deleteDishAction(id))
+            }
+        })
     }
     return (
         <>
@@ -35,7 +47,7 @@ const Dish = ({ dish }) => {
                 <div>
                     <img 
                         className='object-cover h-40 w-full'
-                        src={imagen}  
+                        src={img}  
                     />
                 </div>
 
@@ -58,7 +70,6 @@ const Dish = ({ dish }) => {
                 <div className='grid grid-cols-2 gap-3 mt-4'>
                     <button
                         onClick={ () => editProducto() }
-                        //className='bg-blue-500 p-2 rounded-md hover:bg-blue-600 text-white font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out'
                         className='bg-gradient-to-l from-blue-400 to-blue-500 hover:from-green-500 hover:to-green-700 font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out text-white rounded-md'
                     >
                         Edit
