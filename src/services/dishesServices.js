@@ -10,27 +10,28 @@ import {
     addDishError,
 
     // Edit
-    //selectedDish,
+    selectedDish,
     editDishSuccess,
     editDishError,
+    isEditing,
 
     //Delete
     startDelete,
     delteDishSuccess,
-    deleteDishError
+    deleteDishError,
+
+    getEspecificDish,
 } from '../features/dishesSlice';
 import Swal from 'sweetalert2';
+import axiosClient from '../config/axios';
 
 export const getAllDishesAction = createAsyncThunk(
     'getAllDishes',
     async (_, thunkApi) => {
         thunkApi.dispatch(startGettingData(true));
-        //console.log(_, 'data-----?')
         try {
-            //thunkApi.dispatch(getDishesSuccess())
-            setTimeout(() => {
-                thunkApi.dispatch(getDishesSuccess())
-            }, 1000)
+            const result = await axiosClient.get('/api/dishes');
+            thunkApi.dispatch(getDishesSuccess(result.data.dishes))
         } catch (error) {
             console.log(error)
             thunkApi.dispatch(gettingDataError('Unable to get the Dishes'));
@@ -43,14 +44,13 @@ export const addNewDishAction = createAsyncThunk(
     async (data, thunkApi ) => {
         thunkApi.dispatch(startAddingDish(true));
         try {
-            setTimeout(() => {
-                thunkApi.dispatch(addDishSuccess(data))
-                Swal.fire(
-                    'Great',
-                    'Dish added correctly',
-                    'success'
-                )
-            }, 1500)
+            const dish = await axiosClient.post('/api/dishes', data)
+            thunkApi.dispatch(addDishSuccess(dish.data.dish))
+            Swal.fire(
+                'Great',
+                'Dish added correctly',
+                'success'
+            )
         } catch (error) {
             console.log(error)
             thunkApi.dispatch(addDishError('Unable to save the dish'))
@@ -63,8 +63,12 @@ export const editDishAction = createAsyncThunk(
     'editDish',
     async(data, thunkApi) => {
         try {
-            //console.log(data, 'data edited?')
-            thunkApi.dispatch(editDishSuccess(data))
+            const result = await axiosClient.put(`/api/dishes/${data._id}`, data)
+            thunkApi.dispatch(editDishSuccess(result.data.dish))
+            if(result.status === 200){
+                thunkApi.dispatch(isEditing(result.status))
+            }
+            thunkApi.dispatch(selectedDish({}))
         } catch (error) {
             console.log(error);
             thunkApi.dispatch(editDishError('Unable to Edit the dish'))
@@ -74,13 +78,28 @@ export const editDishAction = createAsyncThunk(
 
 export const deleteDishAction = createAsyncThunk(
     'deleteDish',
-    async(id, thunkApi) => {
+    async(_id, thunkApi) => {
         thunkApi.dispatch(startDelete())
         try {
-            thunkApi.dispatch(delteDishSuccess(id))
+            await axiosClient.delete(`/api/dishes/${_id}`)
+            thunkApi.dispatch(delteDishSuccess(_id))
         } catch (error) {
             console.log(error)
             thunkApi.dispatch(deleteDishError('Unable to delete the dish'))
+        }
+    }
+);
+
+export const getEspecificDishAction = createAsyncThunk(
+    'getEspecificDish',
+    async (id, thunkApi) => {
+
+        try {
+            const result = await axiosClient.get(`/api/dishes/${id}`);
+            thunkApi.dispatch(getEspecificDish(result.data.dish))
+        } catch (error) {
+            console.log(error);
+            thunkApi.dispatch(gettingDataError('Unable to get the dish'))
         }
     }
 )

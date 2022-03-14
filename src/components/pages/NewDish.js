@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addNewDishAction } from '../../services/dishesServices';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,12 +45,15 @@ const NewDish = () => {
             
             if( imgUrl ){
                 let dishObj = {...dish};
-                //dishObj.img = imgUrl;
-                dishObj.img = 'https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg';
-                dishObj.id = Math.random();
+                //dishObj.img = 'https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg';
+                dishObj.img = imgUrl;
                 dispatch(addNewDishAction(dishObj));
-                navigation('/');
+                
             }
+
+            setTimeout(() => {
+                navigation('/');
+            }, 1500)
             
         }
     })

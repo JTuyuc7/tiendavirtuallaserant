@@ -16,7 +16,8 @@ const Sidebar = () => {
     }
 
     const newDishToBeAdded = () => {
-        dispatch(selectedImg('https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'))
+        dispatch(selectedImg(''))
+        //dispatch(selectedImg('https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'))
     }
 
     return(
