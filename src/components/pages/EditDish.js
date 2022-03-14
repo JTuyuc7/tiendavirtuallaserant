@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
-import { editDishAction } from '../../services/dishesServices';
+import { editDishAction, getEspecificDishAction } from '../../services/dishesServices';
 import { cancelEdition } from '../../features/dishesSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BsFileExcelFill, BsSaveFill } from 'react-icons/bs';
 import ImageUpload from '../subcomponents/UploadImage';
 import { useUpload } from '../hooks/useUploadImage';
@@ -14,9 +14,11 @@ const EditDish = () => {
 
     const dispatch = useDispatch();
     const navigation = useNavigate();
-    const { dish } = useSelector((state) => state.dishes);
+    const params = useParams();
+
+    const { dish, dishFromDb } = useSelector((state) => state.dishes);
     const [ tempImg, setTempImg ] = useState(null);
-    let { name, price, quantity, category, img, description, id } = dish;
+    let { name, price, quantity, category, description, _id } = dish;
 
     const { upload, progress, imgUrl, imgError, progresImg, handleProgress, handleUploadStart, handleUploadError, handleUploadSuccess  } = useUpload();
     const formik = useFormik({
@@ -45,22 +47,24 @@ const EditDish = () => {
             
             if( imgUrl ){
                 let dishObj = {...dish};
-                //dishObj.img = imgUrl;
-                dishObj.img = 'https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'
-                dishObj.id = id;
+                dishObj.img = imgUrl;
+                dishObj._id = _id;
                 dispatch(editDishAction(dishObj));
                 Swal.fire(
                     'Great',
                     'Dish edited correctly',
                     'success'
                 )
-                navigation('/');
+                setTimeout(() => {
+                    navigation('/');
+                }, 1500)
             }
         }
     })
 
     useEffect(() => {
-    },[dish]);
+        dispatch(getEspecificDishAction(params.id))
+    },[params.id]);
 
 
     const handleCancelEdition = () => {

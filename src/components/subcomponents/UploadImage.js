@@ -89,6 +89,7 @@ const ImageUpload = (props) => {
                         <img 
                             src={url}
                             className="bg-contain h-24"
+                            alt='Dish'
                         />
                     )  }
                 </div>

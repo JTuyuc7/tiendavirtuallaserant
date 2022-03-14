@@ -1,18 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-/* const tempData = [
-    { id: 1, nombre: 'Producto uno', precio: 30, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 3 },
-    { id: 2, nombre: 'Producto dos', precio: 20, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno',cantidad: 12 },
-    { id: 3, nombre: 'Producto tres', precio: 35, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'bebibda', cantidad: 19 },
-    { id: 4, nombre: 'Producto cuatro', precio: 12, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno', cantidad: 100 },
-    { id: 5, nombre: 'Producto cinco', precio: 50, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'bebida', cantidad: 25 },
-    { id: 6, nombre: 'Producto seis', precio: 90, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno', cantidad: 20 },
-    { id: 7, nombre: 'Producto site', precio: 100, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 15 },
-    { id: 8, nombre: 'Producto ocho', precio: 300, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'postre', cantidad: 9 }
-]
-
-const tempTest = []; */
-
 const initialState = {
     dishes: [],
     dish: {},
@@ -20,7 +7,10 @@ const initialState = {
     error: null,
     message: '',
     idDelete: null,
-    imgEdited: ''
+    imgEdited: '',
+    isEditing: null,
+    reqStatus: null,
+    dishFromDb: {}
 }
 
 export const dishesSlice = createSlice({
@@ -31,7 +21,7 @@ export const dishesSlice = createSlice({
             state.loading = action.payload
         },
         getDishesSuccess: (state, action) => {
-            state.dishes = state.dishes
+            state.dishes = action.payload
             state.loading = false
         },
         gettingDataError: (state, action) => {
@@ -44,22 +34,25 @@ export const dishesSlice = createSlice({
         },
         addDishSuccess: (state, action) => {
             state.loading = false
-            state.dishes = [action.payload, ...state.dishes]
+            state.dishes = [...state.dishes, action.payload ]
         },
         addDishError: (state, action) => {
-            state.error = action.payload
             state.error = action.payload
         },
         selectedDish: (state, action) => {
             state.dish = action.payload
         },
+        isEditing: (state, action) => {
+            state.reqStatus = action.payload
+        },
         editDishSuccess: (state, action) => {
             //state.dish = {}
-            state.dishes = state.dishes.map( (ele) => ele.id === action.payload.id ? action.payload : ele )
-            //state.dish = null
+            state.dishes = state.dishes.map( (ele) => ele._id === action.payload._id ? action.payload : ele )
+            state.isEditing = false
         },
         editDishError: (state, action) => {
             state.error = action.payload
+            state.isEditing = action.payload
         },
         cancelEdition: (state, action) => {
             state.dish = {}
@@ -68,18 +61,23 @@ export const dishesSlice = createSlice({
             state.idDelete = action.payload
         },
         startDelete: (state, action) => {
-            state.loading = true
+            //state.loading = true
         },
         delteDishSuccess: (state, action) => {
-            state.dishes = state.dishes.filter( (ele) => ele.id !== action.payload )
+            state.dishes = state.dishes.filter( (ele) => ele._id !== action.payload )
             state.idDelete = null
-            state.loading = null
+            //state.loading = null
         },
         deleteDishError: (state, action) => {
             state.message = action.payload
         },
         selectedImg: (state, action) => {
             state.imgEdited = action.payload
+        },
+
+        // Get the especifc dish by ID
+        getEspecificDish: (state, action) => {
+            state.dishFromDb = action.payload;
         }
     }
 });
@@ -99,6 +97,7 @@ export const {
     editDishSuccess,
     editDishError,
     cancelEdition,
+    isEditing,
 
     //Delete
     getIdDelete,
@@ -108,6 +107,9 @@ export const {
 
     //Selec img
     selectedImg,
+    
+    // Get An especific dish
+    getEspecificDish,
     
 } = dishesSlice.actions;
 export default dishesSlice.reducer;
