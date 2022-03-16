@@ -84,7 +84,7 @@ const OurMenu = () => {
                         {/* <h1 className='text-center font-bold uppercase text-2xl mb-5'>{ dishes.length != 0 ? 'Our Menu' : loading ? 'Loading' : 'No dishes found Start adding one'}</h1> */}
                         <h1 className='text-center font-bold uppercase text-2xl mb-5'>{ search && filteredData == 0  ? `No dishes for ${search} founded` : 'Our Menu'  }</h1>
 
-                        <div className='sm:grid-cols-2 sm:grid gap-5 xl:grid-cols-3'>
+                        <div className='sm:grid-cols-2 sm:grid gap-6 xl:grid-cols-3'>
                             { filteredData?.map( (dish) => (
                                 <Dish 
                                     key={dish._id}

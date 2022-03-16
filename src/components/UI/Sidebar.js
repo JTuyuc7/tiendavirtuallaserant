@@ -1,10 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { BsFillHouseDoorFill, BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillHouseDoorFill, BsFillPlusSquareFill, BsFileBarGraphFill } from 'react-icons/bs';
 import { selectedImg } from '../../features/dishesSlice';
 import { useDispatch } from 'react-redux';
-
-//BsFillHouseDoorFill
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -17,7 +15,6 @@ const Sidebar = () => {
 
     const newDishToBeAdded = () => {
         dispatch(selectedImg(''))
-        //dispatch(selectedImg('https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg'))
     }
 
     return(
@@ -60,8 +57,19 @@ const Sidebar = () => {
                                 <h3 className=' text-2xl text-gray-200'> <BsFillPlusSquareFill /></h3>
                             </NavLink>
                         </div>
+
+                        <div className='mb-3 hover:scale-105 shadow-2xl rounded-md'>
+                            <NavLink
+                                //onClick={ () => newDishToBeAdded() }
+                                style={ ({isActive}) => isActive ? activeStyle : undefined}
+                                className='flex p-3 justify-between rounded-md uppercase font-bold text-gray-800'
+                                to={'/dishes-graphic'}
+                            >
+                                <h2 className='hidden md:contents text-md text-gray-100'>Graphic</h2>
+                                <h3 className=' text-2xl text-gray-200'> <BsFileBarGraphFill /></h3>
+                            </NavLink>
+                        </div>
                     </div>
-                    {/*<h2 className='hidden md:contents'>Contenedor navegacion</h2>*/}
                 </div>
             </div>
         </>
