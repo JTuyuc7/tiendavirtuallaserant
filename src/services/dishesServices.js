@@ -13,7 +13,7 @@ import {
     selectedDish,
     editDishSuccess,
     editDishError,
-    isEditingFunc,
+    startEditinDish,
 
     //Delete
     startDelete,
@@ -21,6 +21,8 @@ import {
     deleteDishError,
 
     getEspecificDish,
+
+    clearError,
 } from '../features/dishesSlice';
 import Swal from 'sweetalert2';
 import axiosClient from '../config/axios';
@@ -35,6 +37,16 @@ export const getAllDishesAction = createAsyncThunk(
         } catch (error) {
             console.log(error)
             thunkApi.dispatch(gettingDataError('Unable to get the Dishes'));
+            Swal.fire({
+                title: 'Something went wrong try again later',
+                icon: 'error',
+                toast: true,
+                position: 'top-end'
+            }).then( (val) => {
+                if(val.isConfirmed){
+                    thunkApi.dispatch(clearError(''))
+                }
+            })
         }
     }
 );
@@ -45,16 +57,28 @@ export const addNewDishAction = createAsyncThunk(
         thunkApi.dispatch(startAddingDish(true));
         try {
             const dish = await axiosClient.post('/api/dishes', data);
-            console.log(dish, 'error')
             thunkApi.dispatch(addDishSuccess(dish.data.dish))
+            
             Swal.fire(
                 'Great',
                 `${dish.data.msg}`,
                 'success'
             )
+            
         } catch (error) {
             console.log(error)
             thunkApi.dispatch(addDishError('Unable to save the dish'))
+            Swal.fire({
+                title: 'Something went wrong',
+                text: 'DIsh could not be saved',
+                icon: 'error',
+                confirmButtonColor: '#3085f6',
+                confirmButtonText: 'Ok, go home',
+            }).then( (res) => {
+                if(res.isConfirmed){
+                    thunkApi.dispatch(clearError(''))
+                }
+            })
         }
     }
 );
@@ -63,16 +87,30 @@ export const addNewDishAction = createAsyncThunk(
 export const editDishAction = createAsyncThunk(
     'editDish',
     async(data, thunkApi) => {
+        thunkApi.dispatch(startEditinDish(true))
         try {
             const result = await axiosClient.put(`/api/dishes/${data._id}`, data)
             thunkApi.dispatch(editDishSuccess(result.data.dish))
-            if(result.status === 200){
-                thunkApi.dispatch(isEditingFunc(result.status))
-            }
+            Swal.fire(
+                'Great',
+                'Dish edited correctly',
+                'success'
+            )
             thunkApi.dispatch(selectedDish({}))
         } catch (error) {
             console.log(error);
             thunkApi.dispatch(editDishError('Unable to Edit the dish'))
+            Swal.fire({
+                title: 'Something went wrong',
+                text: 'DIsh could not be saved',
+                icon: 'error',
+                confirmButtonColor: '#3085f6',
+                confirmButtonText: 'Ok, go home',
+            }).then( (res) => {
+                if(res.isConfirmed){
+                    thunkApi.dispatch(clearError(null))
+                }
+            })
         }
     }
 )
@@ -84,9 +122,26 @@ export const deleteDishAction = createAsyncThunk(
         try {
             await axiosClient.delete(`/api/dishes/${_id}`)
             thunkApi.dispatch(delteDishSuccess(_id))
+
+            Swal.fire(
+                'Success',
+                'Deleted correctly',
+                'success'
+            )
         } catch (error) {
             console.log(error)
             thunkApi.dispatch(deleteDishError('Unable to delete the dish'))
+            Swal.fire({
+                title: 'Something went wrong',
+                text: 'DIsh could not be deleted',
+                icon: 'error',
+                confirmButtonColor: '#3085f6',
+                confirmButtonText: 'Got it',
+            }).then( (res) => {
+                if(res.isConfirmed){
+                    thunkApi.dispatch(clearError(null))
+                }
+            })
         }
     }
 );

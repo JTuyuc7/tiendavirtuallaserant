@@ -7,23 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingPage from '../subcomponents/LoadingPage';
 import { selectedImg } from '../../features/dishesSlice';
 
-/* const tempData = [
-    { id: 1, nombre: 'Producto uno', precio: 30, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 3 },
-    { id: 2, nombre: 'Producto dos', precio: 20, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno',cantidad: 12 },
-    { id: 3, nombre: 'Producto tres', precio: 35, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'bebibda', cantidad: 19 },
-    { id: 4, nombre: 'Producto cuatro', precio: 12, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno', cantidad: 100 },
-    { id: 5, nombre: 'Producto cinco', precio: 50, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'bebida', cantidad: 25 },
-    { id: 6, nombre: 'Producto seis', precio: 90, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'desayuno', cantidad: 20 },
-    { id: 7, nombre: 'Producto site', precio: 100, existencia: true, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'comida', cantidad: 15 },
-    { id: 8, nombre: 'Producto ocho', precio: 300, existencia: false, img: '', descripcion: 'esta es una pequeña descripcion del platillo creado', categoria: 'postre', cantidad: 9 }
-] */
-
 const OurMenu = () => {
     const navigation = useNavigate()
     const [ isVisible, setIsVisible ] = useState(false);
 
     const dispatch = useDispatch();
-    const { loading, dishes } = useSelector( (state) => state.dishes);
+    const { loading, dishes, error } = useSelector( (state) => state.dishes);
     const [ search, setSearch ] = useState('')
     
     let filteredData = dishes.filter( (ele) => {

@@ -9,6 +9,7 @@ import { useUpload } from '../hooks/useUploadImage';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import Swal from 'sweetalert2';
+import Spinning from '../subcomponents/Spinning';
 
 const EditDish = () => {
 
@@ -16,7 +17,7 @@ const EditDish = () => {
     const navigation = useNavigate();
     const params = useParams();
 
-    const { dish, dishFromDb } = useSelector((state) => state.dishes);
+    const { dish, editingStatus } = useSelector((state) => state.dishes);
     const [ tempImg, setTempImg ] = useState(null);
     let { name, price, quantity, category, description, _id } = dish;
 
@@ -51,15 +52,11 @@ const EditDish = () => {
                 dishObj.img = imgUrl;
                 dishObj._id = _id;
                 dispatch(editDishAction(dishObj));
-                Swal.fire(
-                    'Great',
-                    'Dish edited correctly',
-                    'success'
-                )
-                setTimeout(() => {
-                    navigation('/');
-                }, 1500)
             }
+
+            setTimeout(() => {
+                navigation('/');
+            }, 2000)
         }
     })
 
@@ -229,7 +226,21 @@ const EditDish = () => {
                                         type='submit'
                                         className='bg-gradient-to-l from-purple-900 to-purple-700 p-2 hover:from-blue-600 hover:to-blue-800 rounded-md text-white font-semibold uppercase flex justify-center items-center hover:scale-105 delay-75 transition duration-100 ease-in-out'
                                     >
-                                        Save
+                                        { editingStatus ? (
+                                            <>
+                                                <Spinning 
+                                                    size='20px'
+                                                    width='6px'
+                                                    primaryColor='#6700C2'
+                                                    secondary='white'
+                                                    direction='normal'
+                                                    animateTiming='ease-in-out'
+                                                    rotation={5}
+                                                />
+                                                <p className='ml-3'>Saving</p>
+                                            </>
+                                        ): ( <p>Save</p>)}
+
                                         <p className='ml-2'><BsSaveFill/></p>
                                     </button>
 

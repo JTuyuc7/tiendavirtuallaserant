@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addNewDishAction } from '../../services/dishesServices';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,15 +9,14 @@ import ImageUpload from '../subcomponents/UploadImage';
 // Validation
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import Swal from 'sweetalert2';
 
 const NewDish = () => {
     const dispatch = useDispatch();
     const navigation = useNavigate();
-    const { loading } = useSelector( (state) => state.dishes );
-
+    const { addingStatus } = useSelector( (state) => state.dishes );
     const { upload, progress, imgUrl, imgError, progresImg, handleProgress, handleUploadStart, handleUploadError, handleUploadSuccess  } = useUpload();
     const [ tempImg, setTempImg ] = useState(null);
-
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -48,16 +47,12 @@ const NewDish = () => {
                 //dishObj.img = 'https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg';
                 dishObj.img = imgUrl;
                 dispatch(addNewDishAction(dishObj));
-                
             }
-
             setTimeout(() => {
                 navigation('/');
-            }, 1500)
-            
+            }, 2000)
         }
     })
-
 
     return(
         <>
@@ -212,7 +207,7 @@ const NewDish = () => {
                                 <button 
                                     type="submit" 
                                     className="flex justify-center p-3 bg-purple-800 w-full rounded-md text-white font-bold uppercase cursor-pointer hover:bg-violet-900 hover:scale-105 delay-75 transition duration-100 ease-in-out">
-                                    { loading ? (
+                                    { addingStatus ? (
                                         <>
                                             <Spinning 
                                                 size='20px'
