@@ -42,7 +42,7 @@ export const dishesSlice = createSlice({
         selectedDish: (state, action) => {
             state.dish = action.payload
         },
-        isEditing: (state, action) => {
+        isEditingFunc: (state, action) => {
             state.reqStatus = action.payload
         },
         editDishSuccess: (state, action) => {
@@ -97,7 +97,7 @@ export const {
     editDishSuccess,
     editDishError,
     cancelEdition,
-    isEditing,
+    isEditingFunc,
 
     //Delete
     getIdDelete,

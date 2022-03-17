@@ -13,7 +13,7 @@ import {
     selectedDish,
     editDishSuccess,
     editDishError,
-    isEditing,
+    isEditingFunc,
 
     //Delete
     startDelete,
@@ -44,11 +44,12 @@ export const addNewDishAction = createAsyncThunk(
     async (data, thunkApi ) => {
         thunkApi.dispatch(startAddingDish(true));
         try {
-            const dish = await axiosClient.post('/api/dishes', data)
+            const dish = await axiosClient.post('/api/dishes', data);
+            console.log(dish, 'error')
             thunkApi.dispatch(addDishSuccess(dish.data.dish))
             Swal.fire(
                 'Great',
-                'Dish added correctly',
+                `${dish.data.msg}`,
                 'success'
             )
         } catch (error) {
@@ -66,7 +67,7 @@ export const editDishAction = createAsyncThunk(
             const result = await axiosClient.put(`/api/dishes/${data._id}`, data)
             thunkApi.dispatch(editDishSuccess(result.data.dish))
             if(result.status === 200){
-                thunkApi.dispatch(isEditing(result.status))
+                thunkApi.dispatch(isEditingFunc(result.status))
             }
             thunkApi.dispatch(selectedDish({}))
         } catch (error) {

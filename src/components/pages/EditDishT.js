@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { editDishAction, getEspecificDishAction } from '../../services/dishesServices';
-import { cancelEdition, selectedImg } from '../../features/dishesSlice';
+import { cancelEdition } from '../../features/dishesSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BsFileExcelFill, BsSaveFill } from 'react-icons/bs';
 import ImageUpload from '../subcomponents/UploadImage';
@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import Swal from 'sweetalert2';
 
-const EditDish = () => {
+const EditDishT = () => {
 
     const dispatch = useDispatch();
     const navigation = useNavigate();
@@ -18,11 +18,19 @@ const EditDish = () => {
 
     const { dish, dishFromDb } = useSelector((state) => state.dishes);
     const [ tempImg, setTempImg ] = useState(null);
+    console.log(dishFromDb, 'dish from db ')
+
     let { name, price, quantity, category, description, _id } = dish;
 
     const { upload, progress, imgUrl, imgError, progresImg, handleProgress, handleUploadStart, handleUploadError, handleUploadSuccess  } = useUpload();
-
     const formik = useFormik({
+        // initialValues: {
+        //     name: name,
+        //     price: price,
+        //     quantity: quantity,
+        //     category: category,
+        //     description: description
+        // },
         initialValues: {
             name: name,
             price: price,
@@ -65,11 +73,12 @@ const EditDish = () => {
 
     useEffect(() => {
         dispatch(getEspecificDishAction(params.id))
+        console.log('getting data cada vez que se hace reload?/////////////')
+
     },[params.id]);
 
 
     const handleCancelEdition = () => {
-        dispatch(selectedImg(''));
         dispatch(cancelEdition());
         navigation('/');
     }
@@ -98,7 +107,8 @@ const EditDish = () => {
                                         placeholder='Dish name' 
                                         className='block shadow appearance-none rounded-md w-full py-2 px-2 text-black leading-tight focus:outline-none focus:shadow-outline border-2 border-gray-700 font-semibold placeholder-slate-700'
                                         name='name'
-                                        value={ formik.values.name}
+                                        //value={ formik.values.name}
+                                        value={formik.values.name }
                                         onChange={ formik.handleChange }
                                         onBlur={ formik.handleBlur }
                                     />
@@ -250,4 +260,4 @@ const EditDish = () => {
     )
 }
 
-export default EditDish;
+export default EditDishT;

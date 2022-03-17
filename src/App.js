@@ -7,6 +7,7 @@ import NewDish from './components/pages/NewDish';
 import OurMenu from './components/pages/OurMenu';
 import EditDish from './components/pages/EditDish';
 import GraphicPage from './components/pages/GraphicPage';
+import EditDishT from './components/pages/EditDishT';
 
 // Import SideBar
 import Sidebar from './components/UI/Sidebar';
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path='/' element={ <OurMenu />} />
                   <Route path='/new-dish' element={<NewDish />} />
                   <Route path='/edit-dish/:id' element={ <EditDish />} />
+                  {/* <Route path='/edit-dish/:id' element={ <EditDishT /> } /> */}
                   <Route path='/dishes-graphic' element={ <GraphicPage /> } />
                 </Routes>
               </div>
