@@ -9,8 +9,9 @@ const initialState = {
     idDelete: null,
     imgEdited: '',
     isEditing: null,
-    reqStatus: null,
-    dishFromDb: {}
+    dishFromDb: {},
+    addingStatus: null,
+    editingStatus: null
 }
 
 export const dishesSlice = createSlice({
@@ -26,33 +27,35 @@ export const dishesSlice = createSlice({
         },
         gettingDataError: (state, action) => {
             state.loading = false
-            state.error = true
+            //state.error = true
             state.error = action.payload
         },
+        // Add new Dish
         startAddingDish: (state, action) => {
-            state.loading = action.payload
+            state.addingStatus = action.payload
         },
         addDishSuccess: (state, action) => {
-            state.loading = false
+            state.addingStatus = false
             state.dishes = [...state.dishes, action.payload ]
         },
         addDishError: (state, action) => {
+            state.addingStatus = null
             state.error = action.payload
         },
         selectedDish: (state, action) => {
             state.dish = action.payload
         },
-        isEditingFunc: (state, action) => {
-            state.reqStatus = action.payload
+        startEditinDish: (state, action) => {
+            state.editingStatus = action.payload
         },
         editDishSuccess: (state, action) => {
             //state.dish = {}
             state.dishes = state.dishes.map( (ele) => ele._id === action.payload._id ? action.payload : ele )
-            state.isEditing = false
+            state.editingStatus = false
         },
         editDishError: (state, action) => {
             state.error = action.payload
-            state.isEditing = action.payload
+            state.editingStatus = false
         },
         cancelEdition: (state, action) => {
             state.dish = {}
@@ -78,7 +81,14 @@ export const dishesSlice = createSlice({
         // Get the especifc dish by ID
         getEspecificDish: (state, action) => {
             state.dishFromDb = action.payload;
-        }
+        },
+
+        clearError: (state, action) => {
+            state.error = action.payload
+            state.loading = null
+            state.editingStatus = null
+            state.message = ''
+        },
     }
 });
 
@@ -97,7 +107,7 @@ export const {
     editDishSuccess,
     editDishError,
     cancelEdition,
-    isEditingFunc,
+    startEditinDish,
 
     //Delete
     getIdDelete,
@@ -110,6 +120,7 @@ export const {
     
     // Get An especific dish
     getEspecificDish,
-    
+
+    clearError,
 } = dishesSlice.actions;
 export default dishesSlice.reducer;
