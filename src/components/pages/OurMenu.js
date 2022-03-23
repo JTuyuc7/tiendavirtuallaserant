@@ -12,7 +12,7 @@ const OurMenu = () => {
     const [ isVisible, setIsVisible ] = useState(false);
 
     const dispatch = useDispatch();
-    const { loading, dishes, error } = useSelector( (state) => state.dishes);
+    const { loading, dishes } = useSelector( (state) => state.dishes);
     const [ search, setSearch ] = useState('')
     
     let filteredData = dishes.filter( (ele) => {
@@ -21,7 +21,6 @@ const OurMenu = () => {
 
     // Get Data
     useEffect(() => {
-        //console.log('getting data')
         dispatch(getAllDishesAction())
     },[])
 
@@ -44,7 +43,7 @@ const OurMenu = () => {
 
     const newDishAdded = () => {
         dispatch(selectedImg(''))
-        navigation('/new-dish')
+        navigation('new-dish')
     }
 
     return(
@@ -70,9 +69,7 @@ const OurMenu = () => {
                             </select>
                         </div>
                     <div className='mt-5 mb-5'>
-                        {/* <h1 className='text-center font-bold uppercase text-2xl mb-5'>{ dishes.length != 0 ? 'Our Menu' : loading ? 'Loading' : 'No dishes found Start adding one'}</h1> */}
                         <h1 className='text-center font-bold uppercase text-2xl mb-5'>{ search && filteredData == 0  ? `No dishes for ${search} founded` : 'Our Menu'  }</h1>
-
                         <div className='sm:grid-cols-2 sm:grid gap-6 xl:grid-cols-3'>
                             { filteredData?.map( (dish) => (
                                 <Dish 

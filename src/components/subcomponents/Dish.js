@@ -2,7 +2,7 @@ import React from 'react';
 import { BsFillPencilFill, BsFillTrashFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { deleteDishAction } from '../../services/dishesServices';
-import { selectedDish, getIdDelete, selectedImg } from '../../features/dishesSlice';
+import { selectedDish, getIdDelete, selectedImg, selectPage } from '../../features/dishesSlice';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 
@@ -14,6 +14,7 @@ const Dish = ({ dish }) => {
     const editProducto = () => {
         dispatch(selectedDish(dish))
         dispatch(selectedImg(img))
+        dispatch(selectPage(''))
         navigation(`edit-dish/${_id}`);
     }
 
