@@ -32,13 +32,22 @@ export const getAllDishesAction = createAsyncThunk(
     async (_, thunkApi) => {
         thunkApi.dispatch(startGettingData(true));
         try {
-            const result = await axiosClient.get('/api/dishes');
+            const token = JSON.parse(localStorage.getItem('$token'));
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            
+            const result = await axiosClient.get('/api/dishes', config);
             thunkApi.dispatch(getDishesSuccess(result.data.dishes))
         } catch (error) {
-            console.log(error)
+            await localStorage.removeItem('$token')
+            console.log(error.response)
             thunkApi.dispatch(gettingDataError('Unable to get the Dishes'));
             Swal.fire({
-                title: 'Something went wrong try again later',
+                title: `${error.response.data.msg}`,
                 icon: 'error',
                 toast: true,
                 position: 'top-end'
@@ -56,7 +65,14 @@ export const addNewDishAction = createAsyncThunk(
     async (data, thunkApi ) => {
         thunkApi.dispatch(startAddingDish(true));
         try {
-            const dish = await axiosClient.post('/api/dishes', data);
+            const token = JSON.parse(localStorage.getItem('$token'));
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const dish = await axiosClient.post('/api/dishes', data, config);
             thunkApi.dispatch(addDishSuccess(dish.data.dish))
             
             Swal.fire(
@@ -89,7 +105,14 @@ export const editDishAction = createAsyncThunk(
     async(data, thunkApi) => {
         thunkApi.dispatch(startEditinDish(true))
         try {
-            const result = await axiosClient.put(`/api/dishes/${data._id}`, data)
+            const token = JSON.parse(localStorage.getItem('$token'));
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const result = await axiosClient.put(`/api/dishes/${data._id}`, data, config)
             thunkApi.dispatch(editDishSuccess(result.data.dish))
             Swal.fire(
                 'Great',
@@ -120,7 +143,14 @@ export const deleteDishAction = createAsyncThunk(
     async(_id, thunkApi) => {
         thunkApi.dispatch(startDelete())
         try {
-            await axiosClient.delete(`/api/dishes/${_id}`)
+            const token = JSON.parse(localStorage.getItem('$token'));
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            await axiosClient.delete(`/api/dishes/${_id}`, config)
             thunkApi.dispatch(delteDishSuccess(_id))
 
             Swal.fire(
@@ -149,9 +179,15 @@ export const deleteDishAction = createAsyncThunk(
 export const getEspecificDishAction = createAsyncThunk(
     'getEspecificDish',
     async (id, thunkApi) => {
-
         try {
-            const result = await axiosClient.get(`/api/dishes/${id}`);
+            const token = JSON.parse(localStorage.getItem('$token'));
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const result = await axiosClient.get(`/api/dishes/${id}`, config);
             thunkApi.dispatch(getEspecificDish(result.data.dish))
         } catch (error) {
             console.log(error);

@@ -13,6 +13,7 @@
     "apexcharts": "^3.33.2",
     "autoprefixer": "^10.4.2",
     "axios": "^0.26.1",
+    "dotenv": "^16.0.0",
     "firebase": "^9.6.8",
     "formik": "^2.2.9",
     "postcss": "^8.4.8",

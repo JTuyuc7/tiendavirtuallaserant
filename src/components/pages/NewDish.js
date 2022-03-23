@@ -1,15 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addNewDishAction } from '../../services/dishesServices';
+import { selectPage } from '../../features/dishesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinning from '../subcomponents/Spinning';
 import { useUpload } from '../hooks/useUploadImage';
 import ImageUpload from '../subcomponents/UploadImage';
+import formImg from '../../assets/formImg2.jpg';
 
 // Validation
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import Swal from 'sweetalert2';
 
 const NewDish = () => {
     const dispatch = useDispatch();
@@ -44,12 +45,12 @@ const NewDish = () => {
             
             if( imgUrl ){
                 let dishObj = {...dish};
-                //dishObj.img = 'https://cdn.pixabay.com/photo/2013/02/21/19/06/drink-84533_1280.jpg';
                 dishObj.img = imgUrl;
                 dispatch(addNewDishAction(dishObj));
             }
             setTimeout(() => {
-                navigation('/');
+                navigation('/dishes');
+                dispatch(selectPage('dishes'))
             }, 2000)
         }
     })
@@ -57,13 +58,14 @@ const NewDish = () => {
     return(
         <>
             <div 
-                className=' min-h-screen bg-cover bg-center opacity-70 bg-[url("https://cdn.pixabay.com/photo/2014/06/16/23/10/spices-370114_1280.jpg")]'
+                style={{ backgroundImage: `url(${formImg})`}}
+                className=' min-h-screen bg-cover bg-center opacity-70 '
             >
                 <div className='p-7 shadow-md'>
                     <h2 className='text-white font-bold text-2xl text-center uppercase'>New Dish</h2>
 
                     <div className='flex justify-center mt-7'>
-                        <div className='w-full max-w-xl bg-white opacity-80 rounded-md p-5 shadow-3xl mb-6'>
+                        <div className='w-full max-w-xl bg-white opacity-80 rounded-xl p-5 shadow-3xl mb-6'>
                             <form
                                 onSubmit={formik.handleSubmit}
                             >

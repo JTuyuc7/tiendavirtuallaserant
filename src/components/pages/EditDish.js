@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { editDishAction, getEspecificDishAction } from '../../services/dishesServices';
-import { cancelEdition, selectedImg } from '../../features/dishesSlice';
+import { cancelEdition, selectedImg, selectPage } from '../../features/dishesSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BsFileExcelFill, BsSaveFill } from 'react-icons/bs';
 import ImageUpload from '../subcomponents/UploadImage';
 import { useUpload } from '../hooks/useUploadImage';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import Swal from 'sweetalert2';
 import Spinning from '../subcomponents/Spinning';
+import editImg from '../../assets/editImg.jpg'
 
 const EditDish = () => {
 
@@ -55,7 +55,8 @@ const EditDish = () => {
             }
 
             setTimeout(() => {
-                navigation('/');
+                navigation('/dishes');
+                dispatch(selectPage('dishes'))
             }, 2000)
         }
     })
@@ -68,13 +69,15 @@ const EditDish = () => {
     const handleCancelEdition = () => {
         dispatch(selectedImg(''));
         dispatch(cancelEdition());
-        navigation('/');
+        navigation('/dishes');
+        dispatch(selectPage('dishes'))
     }
 
     return(
         <>
             <div 
-                className=' min-h-screen bg-cover bg-center opacity-70 bg-[url("https://cdn.pixabay.com/photo/2014/06/16/23/10/spices-370114_1280.jpg")]'
+                style={{ backgroundImage: `url(${editImg})`}}
+                className=' min-h-screen bg-cover bg-center opacity-70'
             >
                 <div className='p-7 shadow-md'>
                     <h2 className='text-white font-bold text-2xl text-center uppercase'>Edit Dish</h2>

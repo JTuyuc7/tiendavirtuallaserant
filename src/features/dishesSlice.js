@@ -11,7 +11,8 @@ const initialState = {
     isEditing: null,
     dishFromDb: {},
     addingStatus: null,
-    editingStatus: null
+    editingStatus: null,
+    pageSelected: 'dishes'
 }
 
 export const dishesSlice = createSlice({
@@ -89,6 +90,23 @@ export const dishesSlice = createSlice({
             state.editingStatus = null
             state.message = ''
         },
+        selectPage: (state, action) => {
+            state.pageSelected = action.payload
+        },
+        clearDishesSlice: (state, action) => {
+            state.dishes = []
+            state.dish = {}
+            state.loading = null
+            state.error = null
+            state.message = ''
+            state.idDelete = null
+            state.imgEdited = ''
+            state.isEditing = null
+            state.dishFromDb = {}
+            state.addingStatus = null
+            state.editingStatus = null
+            state.pageSelected = 'dishes'
+        }
     }
 });
 
@@ -122,5 +140,7 @@ export const {
     getEspecificDish,
 
     clearError,
+    selectPage,
+    clearDishesSlice
 } = dishesSlice.actions;
 export default dishesSlice.reducer;
