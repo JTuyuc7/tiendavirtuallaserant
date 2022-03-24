@@ -63,6 +63,7 @@ const EditDish = () => {
 
     useEffect(() => {
         dispatch(getEspecificDishAction(params.id))
+        // eslint-disable-next-line
     },[params.id]);
 
 

@@ -19,6 +19,7 @@ const NewPassword = () => {
     }
     useEffect(() => {
         verifyToken();
+        // eslint-disable-next-line
     },[]);
 
     const formik = useFormik({

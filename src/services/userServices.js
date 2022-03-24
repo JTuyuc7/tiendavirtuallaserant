@@ -23,7 +23,8 @@ import {
     profileDataSuccess,
     profileError,
     getTokenFromLocalS,
-    userIdToken
+    userIdToken,
+    logOutAction
 } from '../features/userSlice';
 import axiosClient from '../config/axios';
 import Swal from 'sweetalert2';
@@ -220,7 +221,6 @@ export const loggingUserAction = createAsyncThunk(
 export const verifyUserInfoAction = createAsyncThunk(
     'userAuth',
     async (token, thunkApi) => {
-        //thunkApi.dispatch(startGettingProfile(true))
         thunkApi.dispatch(getTokenFromLocalS(token))
         const config = {
             headers: {
@@ -237,6 +237,7 @@ export const verifyUserInfoAction = createAsyncThunk(
                 thunkApi.dispatch(startGettingProfile(false))
             }, 800)
         } catch (error) {
+            await localStorage.removeItem('$token');
             console.log(error.response)
             thunkApi.dispatch(profileError(error.response.data.msg))
             Swal.fire({
@@ -248,6 +249,7 @@ export const verifyUserInfoAction = createAsyncThunk(
             }).then( (val) => {
                 if(val.isConfirmed){
                     thunkApi.dispatch(clearErrors())
+                    thunkApi.dispatch(logOutAction())
                 }
             })
         }

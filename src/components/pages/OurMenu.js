@@ -5,12 +5,11 @@ import { BsArrowUp, BsPlusCircle } from 'react-icons/bs';
 import { getAllDishesAction } from '../../services/dishesServices';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingPage from '../subcomponents/LoadingPage';
-import { selectedImg } from '../../features/dishesSlice';
+import { selectedImg, selectPage } from '../../features/dishesSlice';
 
 const OurMenu = () => {
     const navigation = useNavigate()
     const [ isVisible, setIsVisible ] = useState(false);
-
     const dispatch = useDispatch();
     const { loading, dishes } = useSelector( (state) => state.dishes);
     const [ search, setSearch ] = useState('')
@@ -44,6 +43,7 @@ const OurMenu = () => {
     const newDishAdded = () => {
         dispatch(selectedImg(''))
         navigation('new-dish')
+        dispatch(selectPage('newDish'))
     }
 
     return(
@@ -69,7 +69,7 @@ const OurMenu = () => {
                             </select>
                         </div>
                     <div className='mt-5 mb-5'>
-                        <h1 className='text-center font-bold uppercase text-2xl mb-5'>{ search && filteredData == 0  ? `No dishes for ${search} founded` : 'Our Menu'  }</h1>
+                        <h1 className='text-center font-bold uppercase text-2xl mb-5'>{ search && filteredData == 0  ? `No dishes for ${search} founded` : dishes.length === 0 ? 'No dishes added, start adding one' : 'Our Menu'  }</h1>
                         <div className='sm:grid-cols-2 sm:grid gap-6 xl:grid-cols-3'>
                             { filteredData?.map( (dish) => (
                                 <Dish 
