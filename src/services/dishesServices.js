@@ -24,6 +24,7 @@ import {
 
     clearError,
 } from '../features/dishesSlice';
+import { logOutAction } from '../features/userSlice';
 import Swal from 'sweetalert2';
 import axiosClient from '../config/axios';
 
@@ -54,6 +55,7 @@ export const getAllDishesAction = createAsyncThunk(
             }).then( (val) => {
                 if(val.isConfirmed){
                     thunkApi.dispatch(clearError(''))
+                    thunkApi.dispatch(logOutAction())
                 }
             })
         }
@@ -82,17 +84,19 @@ export const addNewDishAction = createAsyncThunk(
             )
             
         } catch (error) {
+            await localStorage.removeItem('$token')
             console.log(error)
             thunkApi.dispatch(addDishError('Unable to save the dish'))
             Swal.fire({
                 title: 'Something went wrong',
-                text: 'DIsh could not be saved',
+                text: `${error.response.data.msg}`,
                 icon: 'error',
                 confirmButtonColor: '#3085f6',
                 confirmButtonText: 'Ok, go home',
             }).then( (res) => {
                 if(res.isConfirmed){
                     thunkApi.dispatch(clearError(''))
+                    thunkApi.dispatch(logOutAction())
                 }
             })
         }
@@ -121,17 +125,19 @@ export const editDishAction = createAsyncThunk(
             )
             thunkApi.dispatch(selectedDish({}))
         } catch (error) {
+            await localStorage.removeItem('$token')
             console.log(error);
             thunkApi.dispatch(editDishError('Unable to Edit the dish'))
             Swal.fire({
                 title: 'Something went wrong',
-                text: 'DIsh could not be saved',
+                text: `${error.response.data.msg}`,
                 icon: 'error',
                 confirmButtonColor: '#3085f6',
                 confirmButtonText: 'Ok, go home',
             }).then( (res) => {
                 if(res.isConfirmed){
                     thunkApi.dispatch(clearError(null))
+                    thunkApi.dispatch(logOutAction())
                 }
             })
         }
@@ -159,17 +165,19 @@ export const deleteDishAction = createAsyncThunk(
                 'success'
             )
         } catch (error) {
+            await localStorage.removeItem('$token')
             console.log(error)
             thunkApi.dispatch(deleteDishError('Unable to delete the dish'))
             Swal.fire({
                 title: 'Something went wrong',
-                text: 'DIsh could not be deleted',
+                text: `${error.response.data.msg}`,
                 icon: 'error',
                 confirmButtonColor: '#3085f6',
                 confirmButtonText: 'Got it',
             }).then( (res) => {
                 if(res.isConfirmed){
                     thunkApi.dispatch(clearError(null))
+                    thunkApi.dispatch(logOutAction())
                 }
             })
         }
@@ -190,8 +198,21 @@ export const getEspecificDishAction = createAsyncThunk(
             const result = await axiosClient.get(`/api/dishes/${id}`, config);
             thunkApi.dispatch(getEspecificDish(result.data.dish))
         } catch (error) {
+            await localStorage.removeItem('$token')
             console.log(error);
             thunkApi.dispatch(gettingDataError('Unable to get the dish'))
+            Swal.fire({
+                title: 'Session error',
+                text: `${error.response.data.msg}`,
+                icon: 'error',
+                confirmButtonColor: '#3085f6',
+                confirmButtonText: 'Got it',
+            }).then( (res) => {
+                if(res.isConfirmed){
+                    thunkApi.dispatch(clearError(null))
+                    thunkApi.dispatch(logOutAction())
+                }
+            })
         }
     }
 )

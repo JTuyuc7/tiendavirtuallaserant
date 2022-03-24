@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { verifyUserInfoAction } from '../../services/userServices';
 import { useDispatch } from 'react-redux';
 

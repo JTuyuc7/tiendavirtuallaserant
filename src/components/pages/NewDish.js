@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addNewDishAction } from '../../services/dishesServices';
 import { selectPage } from '../../features/dishesSlice';

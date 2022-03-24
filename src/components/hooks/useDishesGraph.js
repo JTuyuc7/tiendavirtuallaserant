@@ -19,27 +19,27 @@ const useDishesGraph = () =>{
     for(let i = 0; i < dishes.length; i ++){
         if( dishes[i].category === 'drink'){
             drink += dishes[i].quantity;
-            priceDrink += dishes[i].price;
+            priceDrink += dishes[i].price * dishes[i].quantity;
         }
 
         if(dishes[i].category === 'breakfast'){
             breakfast += dishes[i].quantity;
-            priceBreak += dishes[i].price;
+            priceBreak += dishes[i].price * dishes[i].quantity;
         }
 
         if(dishes[i].category === 'food'){
             food += dishes[i].quantity;
-            priceFood += dishes[i].price;
+            priceFood += dishes[i].price * dishes[i].quantity;
         }
 
         if(dishes[i].category === 'dessert'){
             dessert += dishes[i].quantity;
-            priceDess += dishes[i].price;
+            priceDess += dishes[i].price * dishes[i].quantity;
         }
         
         if(dishes[i].category === 'dinner'){
             dinner += dishes[i].quantity;
-            priceDiner += dishes[i].price;
+            priceDiner += dishes[i].price * dishes[i].quantity;
         }
     }
     quantities.push(drink);

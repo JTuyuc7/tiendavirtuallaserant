@@ -60,19 +60,31 @@ const ImageUpload = (props) => {
                     hidden={true}
                 />
 
-                <CustomUploadButton
-                    accept="image/*"
-                    name="image"
-                    randomizefilename="true"
-                    storageRef={firebase.storage.ref('images')}
-                    onUploadStart={props.onUploadStart}
-                    onUploadError={props.onUploadError}
-                    onUploadSuccess={props.onUploadSuccess}
-                    onProgress={props.onProgress}
-                    className='uppercase text-white font-semibold bg-purple-700 text-center py-2 rounded-md hover hover:cursor-pointer h-12 hover:scale-105 delay-75 transition duration-100 ease-in-out'
-                >
-                    { !url ? 'Choose an Image' : 'Change Image'}
-                </CustomUploadButton>
+                {
+                    upload ? (
+                        <button
+                            type="button"
+                            disabled
+                            className='uppercase cursor-not-allowed text-white font-semibold bg-purple-700 text-center py-2 rounded-md hover h-12 hover:scale-105 delay-75 transition duration-100 ease-in-out'
+                        >
+                            Uploading...
+                        </button>
+                    ): (
+                        <CustomUploadButton
+                            accept="image/*"
+                            name="image"
+                            randomizefilename="true"
+                            storageRef={firebase.storage.ref('images')}
+                            onUploadStart={props.onUploadStart}
+                            onUploadError={props.onUploadError}
+                            onUploadSuccess={props.onUploadSuccess}
+                            onProgress={props.onProgress}
+                            className='uppercase text-white font-semibold bg-purple-700 text-center py-2 rounded-md hover hover:cursor-pointer h-12 hover:scale-105 delay-75 transition duration-100 ease-in-out'
+                        >
+                            { !url ? 'Choose an Image' : 'Change Image'}
+                        </CustomUploadButton>
+                    )         
+                }
 
                 <div className='justify-center flex'>
 

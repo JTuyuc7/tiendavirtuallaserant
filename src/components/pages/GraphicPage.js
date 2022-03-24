@@ -8,6 +8,7 @@ const GraphicPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getAllDishesAction())
+        // eslint-disable-next-line
     }, [])
     const { prices, quantities } = useDishesGraph();
     
