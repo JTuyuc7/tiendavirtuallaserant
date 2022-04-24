@@ -29,7 +29,7 @@ const Login = () => {
         }
     });
 
-    if(token != ''){
+    if(token !== ''){
         localStorage.setItem('$token', JSON.stringify(token))
         navigation('/dishes')
     }
