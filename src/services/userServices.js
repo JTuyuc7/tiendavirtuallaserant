@@ -238,6 +238,7 @@ export const verifyUserInfoAction = createAsyncThunk(
             }, 800)
         } catch (error) {
             await localStorage.removeItem('$token');
+            await localStorage.removeITem('$URL');
             //console.log(error.response)
             thunkApi.dispatch(profileError(error.response.data.msg))
             Swal.fire({

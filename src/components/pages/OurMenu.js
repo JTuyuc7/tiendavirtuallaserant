@@ -6,13 +6,15 @@ import { getAllDishesAction } from '../../services/dishesServices';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingPage from '../subcomponents/LoadingPage';
 import { selectedImg, selectPage } from '../../features/dishesSlice';
+import { useNavigationDetails } from '../hooks/useNavigationDetails';
 
 const OurMenu = () => {
     const navigation = useNavigate()
     const [ isVisible, setIsVisible ] = useState(false);
     const dispatch = useDispatch();
     const { loading, dishes } = useSelector( (state) => state.dishes);
-    const [ search, setSearch ] = useState('')
+    const [ search, setSearch ] = useState('');
+    const { setNewUrl } = useNavigationDetails()
     
     let filteredData = dishes.filter( (ele) => {
         return ele.category.toLowerCase().indexOf( search.toLowerCase()) > -1
@@ -39,12 +41,13 @@ const OurMenu = () => {
     }
     useEffect(() => {
         window.addEventListener('scroll', toogleVisivility )
-    }, [])
+    }, []);
 
     const newDishAdded = () => {
         dispatch(selectedImg(''))
         navigation('new-dish')
-        dispatch(selectPage('newDish'))
+        dispatch(selectPage('new-dish'))
+        setNewUrl('new-dish')
     }
 
     return(

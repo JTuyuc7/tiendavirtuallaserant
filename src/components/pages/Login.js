@@ -26,6 +26,7 @@ const Login = () => {
         onSubmit: (user) => {
             dispatch(loggingUserAction(user));
             formik.resetForm()
+            localStorage.setItem('$URL', 'dishes')
         }
     });
 
