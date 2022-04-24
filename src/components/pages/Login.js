@@ -38,6 +38,7 @@ const Login = () => {
             return;
         }
         getUsersInfo()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     const resetLink = () => {
         dispatch(resetLinkPass())
