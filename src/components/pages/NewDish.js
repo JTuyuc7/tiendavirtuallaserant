@@ -7,7 +7,6 @@ import Spinning from '../subcomponents/Spinning';
 import { useUpload } from '../hooks/useUploadImage';
 import ImageUpload from '../subcomponents/UploadImage';
 import formImg from '../../assets/formImg2.jpg';
-
 // Validation
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -53,7 +52,7 @@ const NewDish = () => {
                 dispatch(selectPage('dishes'))
             }, 2000)
         }
-    })
+    });
 
     return(
         <>

@@ -1,22 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { BsFillHouseDoorFill, BsFillPlusSquareFill, BsFileBarGraphFill, BsFillPersonFill, BsBoxArrowInRight } from 'react-icons/bs';
 import { selectedImg, selectPage, clearDishesSlice } from '../../features/dishesSlice';
 import { logOutAction } from '../../features/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigationDetails } from '../hooks/useNavigationDetails';
 
 const Sidebar = () => {
     const navigation = useNavigate();
     const dispatch = useDispatch();
     const { pageSelected } = useSelector( (state) => state.dishes )
     const { user } = useSelector( (state) => state.users )
+    const { setNewUrl } = useNavigationDetails();
+    const urlStorage = localStorage.getItem('$URL')
     const newDishToBeAdded = () => {
-        dispatch(selectPage('newDish'))
+        dispatch(selectPage('new-dish'))
         dispatch(selectedImg(''))
+        setNewUrl('new-dish')
     }
 
     const closeSession = () => {
         localStorage.removeItem('$token')
+        localStorage.removeItem('$URL')
         dispatch(logOutAction())
         dispatch(clearDishesSlice())
         navigation('/')
@@ -24,6 +29,16 @@ const Sidebar = () => {
     const changePage = (data) => {
         dispatch(selectPage(data))
     }
+
+    useEffect(() => {
+        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+            if(urlStorage === 'dishes') return;
+            navigation(urlStorage)
+            dispatch(selectPage(urlStorage))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
+
     return(
         <>
             <div className='bg-purple-500 md:w-1/4 xl:w-1/6 shadow-2xl shadow-gray-600 rounded-b-3xl md:rounded-b-none'>
@@ -31,7 +46,7 @@ const Sidebar = () => {
 
                     <div className='md:mb-7 md:mt-4 text-center'>
                         <NavLink
-                            onClick={ () => changePage('dishes')}
+                            onClick={ () => {changePage('dishes'); setNewUrl('dishes')}}
                             className='text-white uppercase font-bold' 
                             to={'/dishes'}
                         >
@@ -43,7 +58,7 @@ const Sidebar = () => {
                         <div className='justify-around md:flex-col flex'>
                             <div className='mb-3 hover:scale-105 shadow-lg rounded-md'>
                                 <NavLink
-                                    onClick={ () => changePage('dishes')}
+                                    onClick={ () => {changePage('dishes'); setNewUrl('dishes')}}
                                     style={{ backgroundColor: pageSelected === 'dishes' ? '#6b46c1': '' }}
                                     className='flex p-1 md:p-2 justify-between rounded-md uppercase font-bold'
                                     to={'/dishes'}
@@ -59,7 +74,7 @@ const Sidebar = () => {
                             <div className='mb-3 hover:scale-105 shadow-2xl rounded-md'>
                                 <NavLink
                                     onClick={ () => newDishToBeAdded() }
-                                    style={{ backgroundColor: pageSelected === 'newDish' ? '#6b46c1': '' }}
+                                    style={{ backgroundColor: pageSelected === 'new-dish' ? '#6b46c1': '' }}
                                     className='flex p-1 md:p-2 justify-between rounded-md uppercase font-bold text-gray-800'
                                     to={'new-dish'}
                                 >
@@ -74,8 +89,8 @@ const Sidebar = () => {
 
                             <div className='mb-3 hover:scale-105 shadow-2xl rounded-md'>
                                 <NavLink
-                                    onClick={ () => changePage('graphic')}
-                                    style={{ backgroundColor: pageSelected === 'graphic' ? '#6b46c1': '' }}
+                                    onClick={ () => {changePage('dishes-graphic'); setNewUrl('dishes-graphic')}}
+                                    style={{ backgroundColor: pageSelected === 'dishes-graphic' ? '#6b46c1': '' }}
                                     className='flex p-1 md:p-2 justify-between rounded-md uppercase font-bold text-gray-800'
                                     to={'dishes-graphic'}
                                 >
@@ -89,7 +104,7 @@ const Sidebar = () => {
 
                             <div className='mb-3 hover:scale-105 shadow-2xl rounded-md'>
                                 <NavLink
-                                    onClick={ () => changePage('profile')}
+                                    onClick={ () => {changePage('profile'); setNewUrl('profile')}}
                                     style={{ backgroundColor: pageSelected === 'profile' ? '#6b46c1': '' }}
                                     className='flex p-1 md:p-2 justify-between rounded-md uppercase font-bold text-gray-800'
                                     to={'profile'}

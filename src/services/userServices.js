@@ -45,7 +45,7 @@ export const createUserAction = createAsyncThunk(
             });
             thunkApi.dispatch(userCreatedSuccess())
         } catch (error) {
-            console.log(error.response);
+            //console.log(error.response);
             thunkApi.dispatch(userCreatedError('Unable to create your account'));
             Swal.fire({
                 title: `${error.response.data.msg}`,
@@ -168,7 +168,7 @@ export const changePasswordAction = createAsyncThunk(
             });
 
         } catch (error) {
-            console.log(error.response)
+            //console.log(error.response)
             thunkApi.dispatch(changedPasswordError(error.response.data.msg))
             Swal.fire({
                 title: `${error.response.data.msg}`,
@@ -201,7 +201,7 @@ export const loggingUserAction = createAsyncThunk(
                 
             })
         } catch (error) {
-            console.log(error.response)
+            //console.log(error.response)
             thunkApi.dispatch(loggedError(`${error.response.data.msg}`))
             Swal.fire({
                 title: `${error.response.data.msg}`,
@@ -238,7 +238,8 @@ export const verifyUserInfoAction = createAsyncThunk(
             }, 800)
         } catch (error) {
             await localStorage.removeItem('$token');
-            console.log(error.response)
+            await localStorage.removeITem('$URL');
+            //console.log(error.response)
             thunkApi.dispatch(profileError(error.response.data.msg))
             Swal.fire({
                 title: `${error.response.data.msg}`,

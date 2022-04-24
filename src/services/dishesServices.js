@@ -45,7 +45,7 @@ export const getAllDishesAction = createAsyncThunk(
             thunkApi.dispatch(getDishesSuccess(result.data.dishes))
         } catch (error) {
             await localStorage.removeItem('$token')
-            console.log(error.response)
+            //console.log(error.response)
             thunkApi.dispatch(gettingDataError('Unable to get the Dishes'));
             Swal.fire({
                 title: `${error.response.data.msg}`,
@@ -85,7 +85,7 @@ export const addNewDishAction = createAsyncThunk(
             
         } catch (error) {
             await localStorage.removeItem('$token')
-            console.log(error)
+            //console.log(error)
             thunkApi.dispatch(addDishError('Unable to save the dish'))
             Swal.fire({
                 title: 'Something went wrong',
@@ -126,7 +126,7 @@ export const editDishAction = createAsyncThunk(
             thunkApi.dispatch(selectedDish({}))
         } catch (error) {
             await localStorage.removeItem('$token')
-            console.log(error);
+            //console.log(error);
             thunkApi.dispatch(editDishError('Unable to Edit the dish'))
             Swal.fire({
                 title: 'Something went wrong',
@@ -166,7 +166,7 @@ export const deleteDishAction = createAsyncThunk(
             )
         } catch (error) {
             await localStorage.removeItem('$token')
-            console.log(error)
+            //console.log(error)
             thunkApi.dispatch(deleteDishError('Unable to delete the dish'))
             Swal.fire({
                 title: 'Something went wrong',
@@ -199,7 +199,7 @@ export const getEspecificDishAction = createAsyncThunk(
             thunkApi.dispatch(getEspecificDish(result.data.dish))
         } catch (error) {
             await localStorage.removeItem('$token')
-            console.log(error);
+            //console.log(error);
             thunkApi.dispatch(gettingDataError('Unable to get the dish'))
             Swal.fire({
                 title: 'Session error',
